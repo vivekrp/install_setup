@@ -45,25 +45,30 @@ if [ $? -eq 0 ]; then
   # Define setup function
   setup() {
     # Download setup.sh for debugging purposes
-    curl -s -o setup.sh https://raw.githubusercontent.com/vivekrp/install_setup/main/setup.sh
-    # Check if the script has been downloaded correctly
-    if [ -s setup.sh ]; then
-      echo "setup.sh downloaded successfully."
-      # Execute the script
-      bash setup.sh
-    else
-      echo "Failed to download setup.sh."
-      exit 1
+    curl -s https://raw.githubusercontent.com/vivekrp/install_setup/main/setup.sh | /bin/bash
+  }
+
+  # Append setup function to the appropriate shell configuration file for future use
+  append_to_shell_config() {
+    local shell_config="$1"
+    local setup_command="curl -s https://raw.githubusercontent.com/vivekrp/install_setup/main/setup.sh | /bin/bash"
+
+    # Check if the setup function is already in the shell config to avoid duplicates
+    if ! grep -q "setup()" "$shell_config"; then
+      {
+        echo -e "\n# Setup function for environment configuration"
+        echo "setup() {"
+        echo "  $setup_command"
+        echo "}"
+        echo "export -f setup"
+      } >>"$shell_config"
     fi
   }
 
-  # Append setup function to the appropriate shell configuration file
   if [ -f "$HOME/.bashrc" ]; then
-    echo 'setup' >>"$HOME/.bashrc"
+    append_to_shell_config "$HOME/.bashrc"
   elif [ -f "$HOME/.zshrc" ]; then
-    echo 'setup' >>"$HOME/.zshrc"
-  elif [ -f "$HOME/.profile" ]; then
-    echo 'setup' >>"$HOME/.profile"
+    append_to_shell_config "$HOME/.zshrc"
   fi
 
   # Execute setup function with the environment variables

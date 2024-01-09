@@ -27,12 +27,12 @@ if [ -z "$BUN_VERSION" ] || [ -z "$GITHUB_TOKEN" ] || [ -z "$DOPPLER_TOKEN" ] ||
 fi
 
 # Download and execute install.sh
-curl -s https://example.com/path/to/install.sh | bash -s -- --bun-version "$BUN_VERSION" --github-token "$GITHUB_TOKEN" --doppler-token "$DOPPLER_TOKEN" --doppler-project "$DOPPLER_PROJECT" --doppler-config "$DOPPLER_CONFIG"
+curl -s https://raw.githubusercontent.com/vivekrp/install_setup/main/install.sh | bash -s -- --bun-version "$BUN_VERSION" --github-token "$GITHUB_TOKEN" --doppler-token "$DOPPLER_TOKEN" --doppler-project "$DOPPLER_PROJECT" --doppler-config "$DOPPLER_CONFIG"
 
 # Check if install.sh was successful
 if [ $? -eq 0 ]; then
   # Download and execute setup.sh
-  curl -s https://example.com/path/to/setup.sh | GITHUB_TOKEN="$GITHUB_TOKEN" DOPPLER_TOKEN="$DOPPLER_TOKEN" bash
+  curl -s https://raw.githubusercontent.com/vivekrp/install_setup/main/setup.sh | GITHUB_TOKEN="$GITHUB_TOKEN" DOPPLER_TOKEN="$DOPPLER_TOKEN" bash
 else
   echo "Installation failed."
   exit 1

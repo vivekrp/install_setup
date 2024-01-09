@@ -4,16 +4,13 @@
 
 # Usage function to display help for the script
 usage() {
-  echo "Usage: $0 --bun-version VERSION --github-token TOKEN --doppler-token TOKEN --doppler-project PROJECT --doppler-config CONFIG"
+  echo "Usage: $0 --github-token TOKEN --doppler-token TOKEN --doppler-project PROJECT --doppler-config CONFIG"
+  exit 1
 }
 
 # Parse command-line arguments
 while [[ "$#" -gt 0 ]]; do
   case $1 in
-  --bun-version)
-    BUN_VERSION="$2"
-    shift
-    ;;
   --github-token)
     GITHUB_TOKEN="$2"
     shift
@@ -36,7 +33,7 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 # Check if all required arguments are provided
-if [ -z "$BUN_VERSION" ] || [ -z "$GITHUB_TOKEN" ] || [ -z "$DOPPLER_TOKEN" ] || [ -z "$DOPPLER_PROJECT" ] || [ -z "$DOPPLER_CONFIG" ]; then
+if [ -z "$GITHUB_TOKEN" ] || [ -z "$DOPPLER_TOKEN" ] || [ -z "$DOPPLER_PROJECT" ] || [ -z "$DOPPLER_CONFIG" ]; then
   usage
 fi
 

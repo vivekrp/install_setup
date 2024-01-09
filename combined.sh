@@ -5,18 +5,32 @@
 # Usage function to display help for the script
 usage() {
   echo "Usage: $0 --bun-version VERSION --github-token TOKEN --doppler-token TOKEN --doppler-project PROJECT --doppler-config CONFIG"
-  exit 1
 }
 
 # Parse command-line arguments
 while [[ "$#" -gt 0 ]]; do
   case $1 in
-    --bun-version) BUN_VERSION="$2"; shift ;;
-    --github-token) GITHUB_TOKEN="$2"; shift ;;
-    --doppler-token) DOPPLER_TOKEN="$2"; shift ;;
-    --doppler-project) DOPPLER_PROJECT="$2"; shift ;;
-    --doppler-config) DOPPLER_CONFIG="$2"; shift ;;
-    *) usage ;;
+  --bun-version)
+    BUN_VERSION="$2"
+    shift
+    ;;
+  --github-token)
+    GITHUB_TOKEN="$2"
+    shift
+    ;;
+  --doppler-token)
+    DOPPLER_TOKEN="$2"
+    shift
+    ;;
+  --doppler-project)
+    DOPPLER_PROJECT="$2"
+    shift
+    ;;
+  --doppler-config)
+    DOPPLER_CONFIG="$2"
+    shift
+    ;;
+  *) usage ;;
   esac
   shift
 done

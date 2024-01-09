@@ -43,7 +43,7 @@ curl -s https://raw.githubusercontent.com/vivekrp/install_setup/main/install.sh 
 # Check if install.sh was successful
 if [ $? -eq 0 ]; then
   # Download and execute setup.sh
-  curl -s https://raw.githubusercontent.com/vivekrp/install_setup/main/setup.sh | GITHUB_TOKEN="$GITHUB_TOKEN" DOPPLER_TOKEN="$DOPPLER_TOKEN" bash
+  curl -s https://raw.githubusercontent.com/vivekrp/install_setup/main/setup.sh | GITHUB_TOKEN="$GITHUB_TOKEN" DOPPLER_TOKEN="$DOPPLER_TOKEN" DOPPLER_PROJECT="$DOPPLER_PROJECT" DOPPLER_CONFIG="$DOPPLER_CONFIG" bash
 else
   echo "Installation failed."
   exit 1

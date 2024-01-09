@@ -44,7 +44,17 @@ curl -s https://raw.githubusercontent.com/vivekrp/install_setup/main/install.sh 
 if [ $? -eq 0 ]; then
   # Define setup function
   setup() {
-    curl -s https://raw.githubusercontent.com/vivekrp/install_setup/main/setup.sh | bash
+    # Download setup.sh for debugging purposes
+    curl -s -o setup.sh https://raw.githubusercontent.com/vivekrp/install_setup/main/setup.sh
+    # Check if the script has been downloaded correctly
+    if [ -s setup.sh ]; then
+      echo "setup.sh downloaded successfully."
+      # Execute the script
+      bash setup.sh
+    else
+      echo "Failed to download setup.sh."
+      exit 1
+    fi
   }
 
   # Append setup function to the appropriate shell configuration file

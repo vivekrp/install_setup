@@ -38,12 +38,26 @@ if [ -z "$GITHUB_TOKEN" ] || [ -z "$DOPPLER_TOKEN" ] || [ -z "$DOPPLER_PROJECT" 
 fi
 
 # Download and execute install.sh
-curl -s https://raw.githubusercontent.com/vivekrp/install_setup/main/install.sh | bash -s -- --bun-version "$BUN_VERSION" --github-token "$GITHUB_TOKEN" --doppler-token "$DOPPLER_TOKEN" --doppler-project "$DOPPLER_PROJECT" --doppler-config "$DOPPLER_CONFIG"
+curl -s https://raw.githubusercontent.com/vivekrp/install_setup/main/install.sh | bash -s -- --bun-version "$BUN_VERSION"
 
 # Check if install.sh was successful
 if [ $? -eq 0 ]; then
-  # Download and execute setup.sh
-  curl -s https://raw.githubusercontent.com/vivekrp/install_setup/main/setup.sh | GITHUB_TOKEN="$GITHUB_TOKEN" DOPPLER_TOKEN="$DOPPLER_TOKEN" DOPPLER_PROJECT="$DOPPLER_PROJECT" DOPPLER_CONFIG="$DOPPLER_CONFIG" bash
+  # Define setup function
+  setup() {
+    curl -s https://raw.githubusercontent.com/vivekrp/install_setup/main/setup.sh | bash
+  }
+
+  # Append setup function to the appropriate shell configuration file
+  if [ -f "$HOME/.bashrc" ]; then
+    echo 'setup' >>"$HOME/.bashrc"
+  elif [ -f "$HOME/.zshrc" ]; then
+    echo 'setup' >>"$HOME/.zshrc"
+  elif [ -f "$HOME/.profile" ]; then
+    echo 'setup' >>"$HOME/.profile"
+  fi
+
+  # Execute setup function with the environment variables
+  setup | GITHUB_TOKEN="$GITHUB_TOKEN" DOPPLER_TOKEN="$DOPPLER_TOKEN" DOPPLER_PROJECT="$DOPPLER_PROJECT" DOPPLER_CONFIG="$DOPPLER_CONFIG" bash
 else
   echo "Installation failed."
   exit 1

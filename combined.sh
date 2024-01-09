@@ -38,7 +38,7 @@ if [ -z "$GITHUB_TOKEN" ] || [ -z "$DOPPLER_TOKEN" ] || [ -z "$DOPPLER_PROJECT" 
 fi
 
 # Download and execute install.sh
-curl -s https://raw.githubusercontent.com/vivekrp/install_setup/main/install.sh | bash -s -- --bun-version "$BUN_VERSION"
+curl -s https://raw.githubusercontent.com/vivekrp/install_setup/main/install.sh | bash
 
 # Check if install.sh was successful
 if [ $? -eq 0 ]; then
@@ -57,7 +57,12 @@ if [ $? -eq 0 ]; then
   fi
 
   # Execute setup function with the environment variables
-  setup | GITHUB_TOKEN="$GITHUB_TOKEN" DOPPLER_TOKEN="$DOPPLER_TOKEN" DOPPLER_PROJECT="$DOPPLER_PROJECT" DOPPLER_CONFIG="$DOPPLER_CONFIG" bash
+  export GITHUB_TOKEN="$GITHUB_TOKEN"
+  export DOPPLER_TOKEN="$DOPPLER_TOKEN"
+  export DOPPLER_PROJECT="$DOPPLER_PROJECT"
+  export DOPPLER_CONFIG="$DOPPLER_CONFIG"
+  setup
+
 else
   echo "Installation failed."
   exit 1

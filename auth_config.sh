@@ -36,7 +36,6 @@ authenticate_with_github() {
         fi
     fi
 }
-authenticate_with_github
 
 # Authenticate with Doppler using a Service Token
 authenticate_with_doppler() {
@@ -67,6 +66,7 @@ authenticate_with_doppler() {
         echo "Doppler setup failed."
     fi
 }
+
+# Call the authentication functions
+authenticate_with_github
 authenticate_with_doppler
-
-

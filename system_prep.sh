@@ -3,44 +3,15 @@
 # Declare global variables
 OS=""
 SYSTEM_PACKAGE_MANAGER=""
-package_manager=""
 
 # Common packages to install
 COMMON_PACKAGES=(gnupg curl git unzip wget)
-
-# Initialize variables with default values
-BUN_VERSION="${BUN_VERSION:-latest}" # Use environment variable or default to the latest version
-
-# Process arguments
-while [[ "$#" -gt 0 ]]; do
-    case $1 in
-    --bun-version)
-        BUN_VERSION="$2"
-        shift
-        ;;
-    *)
-        echo "Unknown parameter passed: $1"
-        exit 1
-        ;;
-    esac
-    shift
-done
-
-# Function to abstract package manager command
-packman() {
-    if [[ -n "$package_manager" ]]; then
-        "$package_manager" "$@"
-    else
-        echo "Error: package manager not set."
-        return 1
-    fi
-}
 
 # Function to detect and export the OS and the system package manager based on the OS.
 detect_and_export_environment() {
     # Detect the operating system
     if [[ "$OSTYPE" == "darwin"* ]]; then
-        OS="darwin"
+        OS="macOS"
     elif [ -f /etc/os-release ]; then
         # shellcheck source=/dev/null
         . /etc/os-release
@@ -58,13 +29,10 @@ detect_and_export_environment() {
             SYSTEM_PACKAGE_MANAGER="dnf"
         fi
         ;;
-    "alpine")
-        SYSTEM_PACKAGE_MANAGER="apk"
-        ;;
     "arch")
         SYSTEM_PACKAGE_MANAGER="pacman"
         ;;
-    "darwin")
+    "macOS")
         SYSTEM_PACKAGE_MANAGER="brew"
         ;;
     *)
@@ -99,14 +67,6 @@ install_update_system_common_packages() {
     case "$system_package_manager" in
     apt-get)
         if $SUDO "$system_package_manager" update -y && $SUDO "$system_package_manager" upgrade -y; then
-            echo "Updated & upgraded system packages using $system_package_manager on $OS."
-        else
-            echo "Failed to update & upgrade system packages using $system_package_manager on $OS."
-            exit 1
-        fi
-        ;;
-    apk)
-        if $SUDO "$system_package_manager" update && $SUDO "$system_package_manager" upgrade; then
             echo "Updated & upgraded system packages using $system_package_manager on $OS."
         else
             echo "Failed to update & upgrade system packages using $system_package_manager on $OS."
@@ -171,18 +131,7 @@ install_update_system_common_packages() {
         ;;
     esac
 }
-install_update_system_common_packages "$SYSTEM_PACKAGE_MANAGER" COMMON_PACKAGES[@] # Call the function
-
-# Function to reload shell session
-reload_shell() {
-    # Source profile files to update the current session's environment
-    # This is a best-effort attempt; sourcing might not be effective in non-interactive shells
-    for profile_file in "$HOME/.bash_profile" "$HOME/.bashrc" "$HOME/.profile" "$HOME/.zshrc"; do
-        if [ -f "$profile_file" ]; then
-            source "$profile_file"
-        fi
-    done
-}
+install_update_system_common_packages "$SYSTEM_PACKAGE_MANAGER" "${COMMON_PACKAGES[@]}" # Call the function
 
 # Function to add a path to the appropriate profile files
 add_to_path() {
@@ -222,7 +171,6 @@ install_and_update_homebrew() {
     # If brew_path is set, Homebrew is likely installed
     if [[ -n "$brew_path" ]]; then
         echo "Homebrew is already installed at $brew_path."
-        package_manager="brew"
     else
         # Install Homebrew/Linuxbrew
         echo "Installing Homebrew/Linuxbrew..."
@@ -234,7 +182,6 @@ install_and_update_homebrew() {
             brew_path=$linux_brew_path
         fi
         echo "Homebrew/Linuxbrew installation complete."
-        package_manager="brew"
     fi
 
     # Add Homebrew to the PATH for the current session
@@ -280,38 +227,5 @@ install_doppler_cli() {
     fi
 }
 install_doppler_cli
-
-# Install Bun
-install_bun() {
-    echo "Installing Bun..."
-    local bun_path="$HOME/.bun/bin"
-    if [[ -z "$BUN_VERSION" || "$BUN_VERSION" == "latest" ]]; then
-        # Install the latest version of Bun
-        curl -fsSL https://bun.sh/install | bash
-    else
-        # Install the specified version of Bun
-        curl -fsSL https://bun.sh/install | bash -s -- "$BUN_VERSION"
-    fi
-
-    # Add Bun to the PATH for future sessions
-    add_to_path "$bun_path"
-
-    # Add Bun to the PATH for the current session
-    export PATH="$bun_path:$PATH"
-
-    # Check if installation was successful
-    if ! command -v bun &>/dev/null; then
-        echo "Bun installation failed."
-        exit 1
-    fi
-
-    echo "Bun installed successfully."
-}
-install_bun "$BUN_VERSION" # Call the function to install Bun with the optional version
-
-# Install Antfu/ni a unified package runner for npm/yarn/pnpm/bun
-bun i -g @antfu/ni
-
-# reload_shell # Reload the shell to update the environment
 
 echo "Please run 'source ~/.bashrc' on Linux or 'source ~/.zshrc' on macOS to update your PATH."

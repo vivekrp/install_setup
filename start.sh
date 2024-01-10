@@ -15,7 +15,7 @@ usage() {
   echo "  --doppler-config CONFIG       Doppler config to use"
   echo ""
   echo "Example:"
-  echo "  $0 --setup-yes --github-token TOKEN --doppler-token TOKEN --doppler-project PROJECT --doppler-config CONFIG"
+  echo "  $0 --install-yes --setup-yes --github-token TOKEN --doppler-token TOKEN --doppler-project PROJECT --doppler-config CONFIG"
   exit 1
 }
 

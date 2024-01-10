@@ -262,7 +262,7 @@ install_and_update_homebrew() {
 install_and_update_homebrew # Call the function to install and update Homebrew
 
 # Install GitHub CLI (gh) using the package manager
-packman install gh
+brew install gh
 
 # Install Doppler CLI
 install_doppler_cli() {

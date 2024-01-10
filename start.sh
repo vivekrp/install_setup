@@ -9,6 +9,14 @@ usage() {
 # Parse command-line arguments
 while [[ "$#" -gt 0 ]]; do
   case $1 in
+  --setup-yes)
+    SETUP="yes"
+    shift
+    ;;
+  --setup-no)
+    SETUP="no"
+    shift
+    ;;
   --bun-version)
     BUN_VERSION="$2"
     shift
@@ -35,7 +43,7 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 # Check if all required arguments are provided
-if [ -z "$GITHUB_TOKEN" ] || [ -z "$DOPPLER_TOKEN" ] || [ -z "$DOPPLER_PROJECT" ] || [ -z "$DOPPLER_CONFIG" ]; then
+if [ -z "$SETUP" ] || [ -z "$GITHUB_TOKEN" ] || [ -z "$DOPPLER_TOKEN" ] || [ -z "$DOPPLER_PROJECT" ] || [ -z "$DOPPLER_CONFIG" ]; then
   usage
 fi
 
@@ -67,18 +75,15 @@ if [ $? -eq 0 ]; then
     fi
   }
 
-  if [ -f "$HOME/.profile" ]; then
-    append_to_shell_config "$HOME/.profile"
-    source "$HOME/.profile"
-  elif [ -f "$HOME/.zshrc" ]; then
+  if [ -f "$HOME/.zshrc" ]; then
     append_to_shell_config "$HOME/.zshrc"
-    source "$HOME/.zshrc"
+    source "$HOME/.profile"
   elif [ -f "$HOME/.bashrc" ]; then
     append_to_shell_config "$HOME/.bashrc"
-    source "$HOME/.bashrc"
+    source "$HOME/.profile"
   elif [ -f "$HOME/.bash_profile" ]; then
     append_to_shell_config "$HOME/.bash_profile"
-    source "$HOME/.bash_profile"
+    source "$HOME/.rofile"
   fi
 
   # Add the setup function to the current shell session
@@ -89,7 +94,15 @@ if [ $? -eq 0 ]; then
   export DOPPLER_TOKEN="$DOPPLER_TOKEN"
   export DOPPLER_PROJECT="$DOPPLER_PROJECT"
   export DOPPLER_CONFIG="$DOPPLER_CONFIG"
-  setup
+
+  if [ "$SETUP" == "yes" ]; then
+    setup
+  elif [ "$SETUP" == "no" ]; then
+    echo "Skipping setup as per the environment variable."
+  else
+    echo "No valid setup environment variable provided. Set SETUP to 'yes' to execute setup or 'no' to skip it."
+    exit 1
+  fi
 
 else
   echo "Installation failed."

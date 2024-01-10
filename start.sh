@@ -74,7 +74,7 @@ check_required_args() {
   [ -z "$DOPPLER_CONFIG" ] && missing_args+=("--doppler-config CONFIG")
   if [ ${#missing_args[@]} -ne 0 ]; then
     echo "Missing required arguments: ${missing_args[*]}"
-    usage
+
   fi
 }
 check_required_args

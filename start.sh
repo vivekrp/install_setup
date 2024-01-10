@@ -66,6 +66,14 @@ while [[ "$#" -gt 0 ]]; do
   shift
 done
 
+# After the argument parsing loop
+echo "INSTALL: $INSTALL"
+echo "SETUP: $SETUP"
+echo "GITHUB_TOKEN: $GITHUB_TOKEN"
+echo "DOPPLER_TOKEN: $DOPPLER_TOKEN"
+echo "DOPPLER_PROJECT: $DOPPLER_PROJECT"
+echo "DOPPLER_CONFIG: $DOPPLER_CONFIG"
+
 # Check if all required arguments are provided and echo the missing ones
 check_required_args() {
   local missing_args=()

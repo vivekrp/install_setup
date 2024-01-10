@@ -31,11 +31,17 @@ BUN_VERSION=""
 # Parse command-line arguments
 while [[ "$#" -gt 0 ]]; do
   case $1 in
-  --install-yes | --install-no)
-    INSTALL="${1#--}"
+  --install-yes)
+    INSTALL="yes"
     ;;
-  --setup-yes | --setup-no)
-    SETUP="${1#--}"
+  --install-no)
+    INSTALL="no"
+    ;;
+  --setup-yes)
+    SETUP="yes"
+    ;;
+  --setup-no)
+    SETUP="no"
     ;;
   --bun-version)
     if [ -n "$2" ] && [[ $2 != --* ]]; then

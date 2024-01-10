@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Usage function to display help for the script
+# Usage function to display help for the script.
 usage() {
   echo "Usage: $0 [OPTIONS]"
   echo "Options:"

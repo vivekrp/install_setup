@@ -39,7 +39,9 @@ packman() {
 # Function to detect and export the OS and the system package manager based on the OS.
 detect_and_export_environment() {
     # Detect the operating system
-    if [ -f /etc/os-release ]; then
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        OS="darwin"
+    elif [ -f /etc/os-release ]; then
         # shellcheck source=/dev/null
         . /etc/os-release
         OS=$ID

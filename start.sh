@@ -63,10 +63,21 @@ while [[ "$#" -gt 0 ]]; do
   shift
 done
 
-# Check if all required arguments are provided
-if [ -z "$INSTALL" ] || [ -z "$SETUP" ] || [ -z "$GITHUB_TOKEN" ] || [ -z "$DOPPLER_TOKEN" ] || [ -z "$DOPPLER_PROJECT" ] || [ -z "$DOPPLER_CONFIG" ]; then
-  usage
-fi
+# Check if all required arguments are provided and echo the missing ones
+check_required_args() {
+  local missing_args=()
+  [ -z "$INSTALL" ] && missing_args+=("--install-yes or --install-no")
+  [ -z "$SETUP" ] && missing_args+=("--setup-yes or --setup-no")
+  [ -z "$GITHUB_TOKEN" ] && missing_args+=("--github-token TOKEN")
+  [ -z "$DOPPLER_TOKEN" ] && missing_args+=("--doppler-token TOKEN")
+  [ -z "$DOPPLER_PROJECT" ] && missing_args+=("--doppler-project PROJECT")
+  [ -z "$DOPPLER_CONFIG" ] && missing_args+=("--doppler-config CONFIG")
+  if [ ${#missing_args[@]} -ne 0 ]; then
+    echo "Missing required arguments: ${missing_args[*]}"
+    usage
+  fi
+}
+check_required_args
 
 # Define install function
 install() {

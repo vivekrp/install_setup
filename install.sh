@@ -312,6 +312,6 @@ install_bun "$BUN_VERSION" # Call the function to install Bun with the optional 
 # Install Antfu/ni a unified package runner for npm/yarn/pnpm/bun
 bun i -g @antfu/ni
 
-reload_shell # Reload the shell to update the environment
+# reload_shell # Reload the shell to update the environment
 
 echo "Please run 'source ~/.bashrc' on Linux or 'source ~/.zshrc' on macOS to update your PATH."

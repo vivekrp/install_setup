@@ -67,14 +67,18 @@ if [ $? -eq 0 ]; then
     fi
   }
 
-  if [ -f "$HOME/.zshrc" ]; then
+  if [ -f "$HOME/.profile" ]; then
+    append_to_shell_config "$HOME/.profile"
+    source "$HOME/.profile"
+  elif [ -f "$HOME/.zshrc" ]; then
     append_to_shell_config "$HOME/.zshrc"
+    source "$HOME/.zshrc"
   elif [ -f "$HOME/.bashrc" ]; then
     append_to_shell_config "$HOME/.bashrc"
-  elif [ -f "$HOME/.profile" ]; then
-    append_to_shell_config "$HOME/.profile"
+    source "$HOME/.bashrc"
   elif [ -f "$HOME/.bash_profile" ]; then
     append_to_shell_config "$HOME/.bash_profile"
+    source "$HOME/.bash_profile"
   fi
 
   # Add the setup function to the current shell session

@@ -90,7 +90,6 @@ while [[ "$#" -gt 0 ]]; do
     ;;
   *)
     echo "Unrecognized argument: $1" >&2
-    usage
     ;;
   esac
   shift

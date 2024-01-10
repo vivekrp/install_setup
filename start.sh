@@ -19,47 +19,71 @@ usage() {
   exit 1
 }
 
+# Initialize variables
+INSTALL=""
+SETUP=""
+GITHUB_TOKEN=""
+DOPPLER_TOKEN=""
+DOPPLER_PROJECT=""
+DOPPLER_CONFIG=""
+BUN_VERSION=""
+
 # Parse command-line arguments
 while [[ "$#" -gt 0 ]]; do
   case $1 in
-  --install-yes)
-    INSTALL="yes"
-    shift
+  --install-yes | --install-no)
+    INSTALL="${1#--}"
     ;;
-  --install-no)
-    INSTALL="no"
-    shift
-    ;;
-  --setup-yes)
-    SETUP="yes"
-    shift
-    ;;
-  --setup-no)
-    SETUP="no"
-    shift
+  --setup-yes | --setup-no)
+    SETUP="${1#--}"
     ;;
   --bun-version)
-    BUN_VERSION="$2"
-    shift
+    if [ -n "$2" ] && [[ $2 != --* ]]; then
+      BUN_VERSION="$2"
+      shift
+    else
+      echo "Error: Argument for $1 is missing" >&2
+      exit 1
+    fi
     ;;
   --github-token)
-    GITHUB_TOKEN="$2"
-    shift
+    if [ -n "$2" ] && [[ $2 != --* ]]; then
+      GITHUB_TOKEN="$2"
+      shift
+    else
+      echo "Error: Argument for $1 is missing" >&2
+      exit 1
+    fi
     ;;
   --doppler-token)
-    DOPPLER_TOKEN="$2"
-    shift
+    if [ -n "$2" ] && [[ $2 != --* ]]; then
+      DOPPLER_TOKEN="$2"
+      shift
+    else
+      echo "Error: Argument for $1 is missing" >&2
+      exit 1
+    fi
     ;;
   --doppler-project)
-    DOPPLER_PROJECT="$2"
-    shift
+    if [ -n "$2" ] && [[ $2 != --* ]]; then
+      DOPPLER_PROJECT="$2"
+      shift
+    else
+      echo "Error: Argument for $1 is missing" >&2
+      exit 1
+    fi
     ;;
   --doppler-config)
-    DOPPLER_CONFIG="$2"
-    shift
+    if [ -n "$2" ] && [[ $2 != --* ]]; then
+      DOPPLER_CONFIG="$2"
+      shift
+    else
+      echo "Error: Argument for $1 is missing" >&2
+      exit 1
+    fi
     ;;
   *)
-    echo "Unrecognized argument: $1"
+    echo "Unrecognized argument: $1" >&2
     usage
     ;;
   esac

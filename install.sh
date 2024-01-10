@@ -6,38 +6,16 @@ SYSTEM_PACKAGE_MANAGER=""
 package_manager=""
 
 # Common packages to install
-COMMON_PACKAGES=(curl wget gnupg git unzip)
+COMMON_PACKAGES=(gnupg curl git unzip wget)
 
 # Initialize variables with default values
 BUN_VERSION="${BUN_VERSION:-latest}" # Use environment variable or default to the latest version
-
-GITHUB_TOKEN="${GITHUB_TOKEN:-}"
-DOPPLER_TOKEN="${DOPPLER_TOKEN:-}"
-
-DOPPLER_PROJECT="${DOPPLER_PROJECT:-}"
-DOPPLER_CONFIG="${DOPPLER_CONFIG:-}"
 
 # Process arguments
 while [[ "$#" -gt 0 ]]; do
     case $1 in
     --bun-version)
         BUN_VERSION="$2"
-        shift
-        ;;
-    --github-token)
-        GITHUB_TOKEN="$2"
-        shift
-        ;;
-    --doppler-token)
-        DOPPLER_TOKEN="$2"
-        shift
-        ;;
-    --doppler-project)
-        DOPPLER_PROJECT="$2"
-        shift
-        ;;
-    --doppler-config)
-        DOPPLER_CONFIG="$2"
         shift
         ;;
     *)

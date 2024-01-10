@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# Save this as combined.sh on your server
-
 # Usage function to display help for the script
 usage() {
   echo "Usage: $0 --github-token TOKEN --doppler-token TOKEN --doppler-project PROJECT --doppler-config CONFIG"
@@ -11,6 +9,10 @@ usage() {
 # Parse command-line arguments
 while [[ "$#" -gt 0 ]]; do
   case $1 in
+  --bun-version)
+    BUN_VERSION="$2"
+    shift
+    ;;
   --github-token)
     GITHUB_TOKEN="$2"
     shift
@@ -45,7 +47,7 @@ if [ $? -eq 0 ]; then
   # Define setup function
   setup() {
     # Download setup.sh for debugging purposes
-    curl -s https://raw.githubusercontent.com/vivekrp/install_setup/main/setup.sh | /bin/bash
+    curl -s https://raw.githubusercontent.com/vivekrp/install_setup/main/setup.sh | bash
   }
 
   # Append setup function to the appropriate shell configuration file for future use
@@ -65,11 +67,18 @@ if [ $? -eq 0 ]; then
     fi
   }
 
-  if [ -f "$HOME/.bashrc" ]; then
-    append_to_shell_config "$HOME/.bashrc"
-  elif [ -f "$HOME/.zshrc" ]; then
+  if [ -f "$HOME/.zshrc" ]; then
     append_to_shell_config "$HOME/.zshrc"
+  elif [ -f "$HOME/.bashrc" ]; then
+    append_to_shell_config "$HOME/.bashrc"
+  elif [ -f "$HOME/.profile" ]; then
+    append_to_shell_config "$HOME/.profile"
+  elif [ -f "$HOME/.bash_profile" ]; then
+    append_to_shell_config "$HOME/.bash_profile"
   fi
+
+  # Add the setup function to the current shell session
+  export -f setup
 
   # Execute setup function with the environment variables
   export GITHUB_TOKEN="$GITHUB_TOKEN"
